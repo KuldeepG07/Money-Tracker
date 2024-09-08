@@ -9,3 +9,20 @@ exports.createIncome = async (req, res, next) => {
         res.status(500).json("Error while adding income");
     }
 }
+
+exports.getRecentIncomes = async (req, res, next) => {
+    try {
+        const email = req.query.email;
+        if (!email) {
+            return res.status(400).json({ status: false, message: "Email is required", item: "" });
+        }
+        let recentIncomes = await IncomeServices.fetchRecentIncomes(email);
+        if (recentIncomes.length > 0) {
+            return res.status(200).json({status: true, item: recentIncomes});
+        } else {
+            return res.status(200).json({status: true, item: []});
+        }
+    } catch(error) {
+        res.status(500).json({status: false, message: `Error while fetching recent incomes! ${error}`, item: ""});
+    }
+}
