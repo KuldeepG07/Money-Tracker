@@ -26,3 +26,20 @@ exports.getRecentIncomes = async (req, res, next) => {
         res.status(500).json({status: false, message: `Error while fetching recent incomes! ${error}`, item: ""});
     }
 }
+
+exports.getTotalIncomes = async (req,res,next) => {
+    try {
+        const email = req.query.email;
+        if (!email) {
+            return res.status(400).json({ status: false, message: "Email is required" });
+        }
+        let amount = await IncomeServices.calculateTotalIncome(email);
+        if(amount !== null) {
+            return res.status(200).json({status: true, incamount: amount});
+        } else {
+            return res.status(200).json({status: true, incamount: 0});
+        }
+    } catch(error) {
+        res.status(500).json({status: false, message: `Error while calculating total incomes! ${error}`});
+    }
+}

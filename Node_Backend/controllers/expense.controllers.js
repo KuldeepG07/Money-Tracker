@@ -26,3 +26,20 @@ exports.getRecentExpenses = async (req, res, next) => {
         res.status(500).json({status: false, message: `Error while fetching recent expenses! ${error}`});
     }
 }
+
+exports.getTotalExpenses = async (req,res,next) => {
+    try {
+        const email = req.query.email;
+        if (!email) {
+            return res.status(400).json({ status: false, message: "Email is required" });
+        }
+        let amount = await ExpenseServices.calculateTotalExpense(email);
+        if(amount !== null) {
+            return res.status(200).json({status: true, expamount: amount});
+        } else {
+            return res.status(200).json({status: true, expamount: 0});
+        }
+    } catch(error) {
+        res.status(500).json({status: false, message: `Error while calculating total expenses! ${error}`});
+    }
+}
