@@ -2,11 +2,11 @@ const IncomeServices = require('../services/income.services');
 
 exports.createIncome = async (req, res, next) => {
     try {
-        const {userId, categoryId, date, amount, description, payer, paymentMethod} = req.body;
-        let income = await IncomeServices.createIncome(userId, categoryId, date, amount, description, payer, paymentMethod);
-        res.status(200).json({status: true, item: income});
+        const {userId, categoryName, date, amount, description, payer, paymentMethod} = req.body;
+        let income = await IncomeServices.createIncome(userId, categoryName, date, amount, description, payer, paymentMethod);
+        res.status(200).json({status: true, message: "Income Added Successfully !"});
     } catch(error) {
-        res.status(500).json("Error while adding income");
+        res.status(500).json({status: false, message:"Error while adding income !"});
     }
 }
 

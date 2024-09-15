@@ -1,9 +1,16 @@
+const categoryModel = require('../models/categories.model');
 const IncomeModel = require('../models/incomes.model');
 const UserModel = require('../models/user.model');
 
 class IncomeServices {
     
-    static async createIncome (userId, categoryId, date, amount, description, payer, paymentMethod) {
+    static async createIncome (userId, categoryName, date, amount, description, payer, paymentMethod) {
+        const categorydata = await categoryModel.findOne({name: categoryName});
+        if(!categorydata) {
+            throw new Error('Category not exists !');
+        }
+
+        const categoryId = categorydata._id;
         const createIncome = new IncomeModel({userId, categoryId, date, amount, description, payer, paymentMethod});
         return await createIncome.save();
     }

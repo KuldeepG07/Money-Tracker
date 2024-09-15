@@ -26,8 +26,29 @@ class UserServices {
         }
     }
 
-    static async generateToken(tokenData, secretKey, jwt_expire) {
-        return jwt.sign(tokenData, secretKey, {expiresIn: jwt_expire});
+    static async getUserProfileData(email) {
+        try {
+            const user = await UserModel.findOne({email});
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async changePassword(email, oldpwd, newpwd) {
+        try {
+            return await UserModel.changePassword(email, oldpwd, newpwd);
+        } catch(error) {
+            throw error;    
+        }
+    }
+
+    static async changeName(email, newName) {
+        try {
+            return await UserModel.changeName(email, newName);
+        } catch(error) {
+            throw error;
+        }
     }
 }
 
