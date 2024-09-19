@@ -24,6 +24,15 @@ class IncomeServices {
         return await IncomeModel.find({ userId }).sort({ date: -1 }).limit(5);
     }
 
+    static async fetchAllIncomes(email) {
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const userId = user._id;
+        return await IncomeModel.find({ userId }).populate('categoryId').sort({ date: -1 });
+    }
+
     static async calculateTotalIncome(email) {
         const user = await UserModel.findOne({ email });
         if (!user) {

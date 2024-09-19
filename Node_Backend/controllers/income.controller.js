@@ -43,3 +43,20 @@ exports.getTotalIncomes = async (req,res,next) => {
         res.status(500).json({status: false, message: `Error while calculating total incomes! ${error}`});
     }
 }
+
+exports.fetchAllIncomesData = async (req,res,next) => {
+    try {
+        const email = req.query.email;
+        if (!email) {
+            return res.status(400).json({ status: false, message: "Email is required", item: "" });
+        }
+        let allIncomes = await IncomeServices.fetchAllIncomes(email);
+        if (allIncomes.length > 0) {
+            return res.status(200).json({status: true, items: allIncomes});
+        } else {
+            return res.status(200).json({status: true, items: []});
+        }
+    } catch(error) {
+        res.status(500).json({status: false, message: `Error while fetching all incomes! ${error}`});
+    }
+};

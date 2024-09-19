@@ -24,6 +24,15 @@ class ExpenseServices {
         return await ExpenseModel.find({ userId }).sort({ date: -1 }).limit(5);
     }
 
+    static async fetchAllExpenses(email) {
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const userId = user._id;
+        return await ExpenseModel.find({ userId }).populate('categoryId').sort({ date: -1 });
+    }
+
     static async calculateTotalExpense(email) {
         const user = await UserModel.findOne({ email });
         if (!user) {

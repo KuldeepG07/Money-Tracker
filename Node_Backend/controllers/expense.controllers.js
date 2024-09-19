@@ -43,3 +43,20 @@ exports.getTotalExpenses = async (req,res,next) => {
         res.status(500).json({status: false, message: `Error while calculating total expenses! ${error}`});
     }
 }
+
+exports.fetchAllExpensesData = async (req,res,next) => {
+    try {
+        const email = req.query.email;
+        if (!email) {
+            return res.status(400).json({ status: false, message: "Email is required" });
+        }
+        let allExpenses = await ExpenseServices.fetchAllExpenses(email);
+        if (allExpenses.length > 0) {
+            return res.status(200).json({status: true, items: allExpenses});
+        } else {
+            return res.status(200).json({status: true, items: []});
+        }
+    } catch (error) {
+        res.status(500).json({status: false, message: `Error while fetching all expenses! ${error}`});
+    }
+};
